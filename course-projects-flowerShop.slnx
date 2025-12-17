@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="FlowerShop.Data.Interfaces/FlowerShop.Data.Interfaces.csproj" Id="886667ac-0d3e-439b-bb0e-a66b951977e7" />
+  <Project Path="FlowerShop.Data.SqlServer/FlowerShop.Data.SqlServer.csproj" Id="9a9416d2-b065-44df-9404-74471ae7e100" />
+  <Project Path="FlowerShop.Domain/FlowerShop.Domain.csproj" />
+  <Project Path="FlowerShop.UI/FlowerShop.UI.csproj" />
+</Solution>
