@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlowerShop.Data.SqlServer.Migrations
 {
     [DbContext(typeof(FlowerShopDbContext))]
-    [Migration("20251217170541_InitialCreate")]
+    [Migration("20251222163114_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -120,10 +120,10 @@ namespace FlowerShop.Data.SqlServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdOrder")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdProduct")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -134,7 +134,35 @@ namespace FlowerShop.Data.SqlServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
                     b.ToTable("ProductOrders");
+                });
+
+            modelBuilder.Entity("FlowerShop.Domain.ProductOrder", b =>
+                {
+                    b.HasOne("FlowerShop.Domain.Order", "Order")
+                        .WithMany("ProductOrders")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FlowerShop.Domain.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("FlowerShop.Domain.Order", b =>
+                {
+                    b.Navigation("ProductOrders");
                 });
 #pragma warning restore 612, 618
         }

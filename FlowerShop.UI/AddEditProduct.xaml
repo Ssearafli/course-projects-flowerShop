@@ -3,10 +3,89 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FlowerShop.UI"
+        xmlns:local="clr-namespace:FlowerShop.UI"       
         mc:Ignorable="d"
-        Title="AddEditProduct" Height="450" Width="800">
-    <Grid>
-        
+        Title="Добавление/Редактирование товара" Height="400" Width="500" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#007AFF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="5"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
+
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                              Margin="5"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#005FB8"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#CCCCCC"/>
+                    <Setter Property="Foreground" Value="#888888"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border  CornerRadius="8" Padding="15" BorderBrush="DarkGray" BorderThickness="2">
+            <Grid VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Название товара:" VerticalAlignment="Center" Margin="0,10,15,10" />
+                <TextBox Grid.Row="0" x:Name="NameBox" Grid.Column="1" Height="28" VerticalContentAlignment="Center" Margin="0,5"/>
+
+                <TextBlock Grid.Row="1" Text="Категория товара:" VerticalAlignment="Center" Margin="0,10,15,10" />
+                <ComboBox Grid.Row="1" x:Name="CategoryBox" Grid.Column="1" Height="28" VerticalContentAlignment="Center" Margin="0,5"/>
+
+                <TextBlock Grid.Row="2" Text="Описание:" VerticalAlignment="Top" Margin="0,12,15,10" />
+                <TextBox Grid.Row="2" x:Name="DescriptionBox" Grid.Column="1" Height="80" Margin="0,5" 
+                         TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+
+                <TextBlock Grid.Row="3" Text="Цена (руб.):" VerticalAlignment="Center" Margin="0,10,15,10" />
+                <TextBox Grid.Row="3" x:Name="PriceBox" Grid.Column="1" Height="28" VerticalContentAlignment="Center" Margin="0,5"/>
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Сохранить" 
+                    Width="110" Height="32" 
+                    Click="Save_Click" 
+                    Margin="0,0,12,0">
+            </Button>
+
+            <Button Content="Отмена" 
+                    Width="110" Height="32" 
+                    Click="Cancel_Click">
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

@@ -1,4 +1,4 @@
-﻿using System.Xml.Linq;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FlowerShop.Domain
 {
@@ -18,16 +18,38 @@ namespace FlowerShop.Domain
         public float TotalPrice {  get; set; }
         public OrderStatus Status { get; set; }
         public DateOnly OrderDate { get; set; }
-        public Order Clone(Order order)
+        public virtual ICollection<ProductOrder> ProductOrders {get; set;} = new List<ProductOrder>();
+
+        [NotMapped]
+        public string OrderDetails
+        {
+            get
+            {
+                if (ProductOrders == null || !ProductOrders.Any())
+                    return "Нет товаров";
+
+                return string.Join(", ", ProductOrders.Select(po =>
+                    $"{po.Product?.Name} x{po.Quantity}"));
+            }
+        }
+        public Order Clone(Order orderToClone)
         {
             return new Order
             {
-                OrderId=OrderId,
-                CustomerName=CustomerName,
-                CustomerPhone=CustomerPhone,
-                TotalPrice=TotalPrice,
-                Status=Status,
-                OrderDate=OrderDate
+                OrderId = orderToClone.OrderId,
+                CustomerName = orderToClone.CustomerName,
+                CustomerPhone = orderToClone.CustomerPhone,
+                TotalPrice = orderToClone.TotalPrice,
+                Status = orderToClone.Status,
+                OrderDate = orderToClone.OrderDate,
+                ProductOrders = orderToClone.ProductOrders?.Select(po => new ProductOrder
+                {
+                    Id = po.Id,
+                    ProductId = po.ProductId,
+                    OrderId = po.OrderId,
+                    Quantity = po.Quantity,
+                    UnitPrice = po.UnitPrice                 
+                }).ToList()
             };
         }
     }

@@ -6,10 +6,42 @@
         xmlns:converters ="clr-namespace:FlowerShop.UI.Converters"
         xmlns:local="clr-namespace:FlowerShop.UI"
         mc:Ignorable="d"
-        Title="Магазин цветов" Height="450" Width="800">
+        Title="Магазин цветов" MinHeight="450" MinWidth="800" WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        <!--<converters:OrderStatusConverter x:Key="OrderStatusConverterr"/>
-        <converters:ProductCategoryConverter x:Key="ProductCategoryConverter"/>-->
+        <converters:OrderStatusConverter x:Key="OrderStatusConverterr"/>
+        <converters:ProductCategoryConverter x:Key="ProductCategoryConverter"/>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#007AFF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="5"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      Margin="5"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#005FB8"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#CCCCCC"/>
+                    <Setter Property="Foreground" Value="#888888"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <TabControl>
@@ -22,33 +54,19 @@
 
 
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                        <Button Content="Добавить товар"
-                    Width="150"
-                    Margin="0 0 10 0"
-                    Click="AddProduct_Click"/>
-                        <Button Content="Редактировать товар"
-                    Width="170"
-                    Click="EditProduct_Click"
-                    Margin="0 0 10 0"/>
-                        <Button Content="Удалить товар" 
-                        Width="170" 
-                        Click="DeleteProduct_Click" 
-                        Margin="0 0 10 0"/>
-
+                        <Button Content="Добавить товар" Width="150" Height="25" Margin="0 0 10 0" Click="AddProduct_Click"/>
+                        <Button Content="Редактировать товар" Width="170" Click="EditProduct_Click" Margin="0 0 10 0"/>
+                        <Button Content="Удалить товар" Width="170" Click="DeleteProduct_Click" Margin="0 0 10 0"/>
                     </StackPanel>
 
 
-                    <DataGrid x:Name="ProductGrid"
-                  Grid.Row="1"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  SelectionMode="Single">
+                    <DataGrid x:Name="ProductGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding ProductId}" Width="80"/>
                             <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="120"/>
-                            <DataGridTextColumn Header="Категория" Binding="{Binding Category}" Width="100"/>
-                            <DataGridTextColumn Header="Описание" Binding="{Binding Product.Description}" Width="100"/>
-                            <DataGridTextColumn Header="Цена за 1 ед." Binding="{Binding Price}" Width="200"/>
+                            <DataGridTextColumn Header="Категория" Binding="{Binding Category, Converter={StaticResource ProductCategoryConverter}}" Width="100"/>
+                            <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="100"/>
+                            <DataGridTextColumn Header="Цена за 1 ед." Binding="{Binding Price, StringFormat={}{0} руб. }" Width="200"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -59,22 +77,101 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                        <Button Content="Добавить заказ" Width="150" Margin="0 0 10 0" Click="AddOrder_Click"/>
+                        <Button Content="Добавить заказ" Width="150" Height ="25" Margin="0 0 10 0" Click="AddOrder_Click"/>
                         <Button Content="Редактировать заказ" Width="170" Margin="0 0 10 0" Click="EditOrder_Click"/>
                         <Button Content="Удалить заказ" Width="170" Margin="0 0 10 0" Click="DeleteOrder_Click"/>
                     </StackPanel>
                     <DataGrid x:Name="OrderGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Id" Binding="{Binding OrderId}" Width="Auto"/>
-                            <DataGridTextColumn Header="Имя заказчика" Binding="{Binding CustomerName}" Width="Auto"/>
-                            <DataGridTextColumn Header="Номер телефона" Binding="{Binding CustomerPhone}" Width="Auto"/>
-                            <DataGridTextColumn Header="Сумма заказа" Binding="{Binding TotalPrice}" Width="Auto"/>
-                            <DataGridTextColumn Header="Статус заказа" Binding="{Binding Status}" Width="Auto"/>
-                            <DataGridTextColumn Header="Дата заказа" Binding="{Binding OrderDate}" Width="Auto"/>
+                            <DataGridTextColumn Header="Id" Binding="{Binding OrderId}" Width="50"/>
+                            <DataGridTextColumn Header="Имя заказчика" Binding="{Binding CustomerName}" Width="150"/>
+                            <DataGridTextColumn Header="Телефон" Binding="{Binding CustomerPhone}" Width="120"/>
+                            <DataGridTextColumn Header="Сумма" Binding="{Binding TotalPrice, StringFormat={}{0} руб. }" Width="100"/>
+                            <DataGridTextColumn Header="Статус" Binding="{Binding Status, Converter={StaticResource OrderStatusConverterr}}" Width="100"/>
+                            <DataGridTextColumn Header="Дата" Binding="{Binding OrderDate, StringFormat={}{0:dd.MM.yyyy}}" Width="100"/>
+                            <DataGridTextColumn Header="Состав" Binding="{Binding OrderDetails}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Подписка">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <GroupBox Header="Текущая подписка" Grid.Row="0" Margin="0 0 0 10">
+                        <StackPanel Margin="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Margin="0 0 20 0">
+                                    <TextBlock Text="Название:" FontWeight="Bold"/>
+                                    <TextBlock Text="Цена:" FontWeight="Bold" Margin="0 5 0 0"/>
+                                    <TextBlock Text="Статус:" FontWeight="Bold" Margin="0 5 0 0"/>
+                                    <TextBlock Text="Осталось дней:" FontWeight="Bold" Margin="0 5 0 0"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock x:Name="SubscriptionNameText" Text="Месячная"/>
+                                    <TextBlock x:Name="SubscriptionPriceText" Text="299 руб." Margin="0 5 0 0"/>
+                                    <TextBlock x:Name="SubscriptionStatusText" Text="Активна" Margin="0 5 0 0"/>
+                                    <TextBlock x:Name="DaysRemainingText" Text="15 дней" Margin="0 5 0 0"/>
+                                </StackPanel>
+                                <Button Grid.Column="2" Content="Продлить подписку" MinWidth="150" MinHeight="30" VerticalAlignment="Bottom" Click="Subscription_Click"/>
+                            </Grid>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Доступные подписки" Grid.Row="1" Margin="0 0 0 10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0" BorderThickness="1" Margin="5" CornerRadius="5" Padding="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <TextBlock Text="Месячная подписка" FontWeight="Bold" FontSize="14"/>
+                                        <TextBlock Text="Доступ ко всем функциям на 30 дней" Margin="0 5 0 0"/>
+                                        <TextBlock Text="299 руб./месяц" FontWeight="Bold" Margin="0 10 0 0" Foreground="Green"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <Border Grid.Row="1" BorderThickness="1" Margin="5" CornerRadius="5" Padding="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <TextBlock Text="Годовая подписка" FontWeight="Bold" FontSize="14"/>
+                                        <TextBlock Text="Доступ ко всем функциям на 365 дней" Margin="0 5 0 0"/>
+                                        <TextBlock Text="2 899 руб./год" FontWeight="Bold" Margin="0 10 0 0" Foreground="Green"/>
+                                        <TextBlock Text="(Экономия 689 руб. по сравнению с месячной)" FontSize="11" Margin="0 5 0 0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </GroupBox>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="История подписки" Width="150" Height="30" Click="SubscriptionHistory_Click"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>

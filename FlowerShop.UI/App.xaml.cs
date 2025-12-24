@@ -13,6 +13,7 @@ namespace FlowerShop.UI
     {
         private IOrderRepository _orderRepository = null!;
         private IProductRepository _productRepository = null!;
+        private IPaymentRepository _paymentRepository = null!;
         private FlowerShopDbContext _dbContext = null!;
 
         protected override void OnStartup(StartupEventArgs e)
@@ -27,8 +28,9 @@ namespace FlowerShop.UI
             _dbContext.Database.Migrate();
             _productRepository = new ProductRepository(_dbContext);
             _orderRepository = new OrderRepository(_dbContext);
+            _paymentRepository = new PaymentRepository(_dbContext);
 
-            var mainWindow = new MainWindow(_productRepository,_orderRepository);
+            var mainWindow = new MainWindow(_productRepository,_orderRepository,_paymentRepository);
             mainWindow.Show();
         }
 
